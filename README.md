@@ -30,3 +30,13 @@ notion2vuepress is a Python package that seamlessly converts Notion notes (inclu
 https://www.notion.so/youyizhang/git-9cad24555c3648b1a902333128bf1a0d?pvs=4
 
 id = 9cad24555c3648b1a902333128bf1a0d
+
+
+
+## 运行的时候报错需要重新装包 notion-cobertos-fork
+
+```
+1. pip uninstall notion-cobertos-fork
+2. pip install notion-cobertos-fork
+```
+

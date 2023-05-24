@@ -113,12 +113,12 @@ class NotionExporter(Notion):
 
     @staticmethod
     def modify_title(title):
-        return title.replace("*", "").replace("_", "")
+        return title.replace("*", "").replace("_", "").replace("/", "-")
 
-    def export_to_markdown(self, page_id, file_path, number="01"):
+    def export_to_markdown(self, page_id, file_path):
         # 获取页面对象
         page_obj = self.get_page_obj(page_id)
-        file_path = os.path.join(file_path, f"{number}.{self.modify_title(page_obj.title)}")
+        file_path = os.path.join(file_path, f"{self.modify_title(page_obj.title)}")
 
         self.export_cli(f"{file_path}.md", page_obj)
         if not self.children_exists(page_id):
@@ -128,29 +128,9 @@ class NotionExporter(Notion):
         self.create_file_folder(file_path)
         for idx, page_child_obj in enumerate(page_obj.children):
             if page_child_obj.type == "page":
-                padded_number = str(idx).zfill(2)
-                self.export_to_markdown(page_child_obj.id, file_path,padded_number)
+                self.export_to_markdown(page_child_obj.id, file_path)
 
     def create_file_folder(self, directory):
         """判断文件夹是否存在，如果不存在则创建"""
         if not os.path.exists(directory):
             os.makedirs(directory)
-
-
-# 创建 NotionExporter 实例
-exporter = NotionExporter(
-
-    _token='v02%3Auser_token_or_cookies%3AQ66-cNX8yXEK-jzADJY-Ho_NxYr82y2kXfniQU6zC1pXNfP11XPuIooLT-EsjDPlgTyvHuSxj575Om0OhSIx0oRd5YYep9UPqDhhTqPxbLQqrGqw7HzKG0aNeSnG8K-2gLGP',
-    img_token='1%3AvljdZQ4YXmhwbh1RQcqbgsj_PtuU0FGAplMDnOC_1vY%3Af9502cfb689b275d22efa623be36895db52c50c567d9b760%3A50ddbcb1-ae33-4542-aaae-7308f5c3bdb8',
-)
-
-# page_url = 'https://www.notion.so/youyizhang/git-9cad24555c3648b1a902333128bf1a0d?pvs=4'
-# page_url = 'https://www.notion.so/youyizhang/git-f79162ca5168476890309e5cb436ff68?pvs=4'
-# page_url = 'https://www.notion.so/youyizhang/d9c4e3199aad4c60a816ace1df4e6477?pvs=4'
-# page_url = 'https://www.notion.so/youyizhang/git-9cad24555c3648b1a902333128bf1a0d?pvs=4'
-# page_url = 'https://www.notion.so/youyizhang/submodule-179aee22a1ed4fcba2ad405cc7e4dbb2?pvs=4'
-page_url = '9cad24555c3648b1a902333128bf1a0d'
-# 调用 export_to_markdown 方法导出 Notion 页面为 Markdown
-file_path = os.path.join(os.getcwd(), "exported_notes")
-
-exporter.export_to_markdown(page_url, file_path)
